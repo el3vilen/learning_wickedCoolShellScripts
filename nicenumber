@@ -13,7 +13,7 @@ nicenumber() {
   decimal=$(echo $1 | cut -d. -f2) # Right of the decimal
 
   # Check if number has more than the integer part.
-  if []; then
+  if [ "$decimal" != "$1" ]; then
     # There's a fractional part, so let's include it.
     result="${DD:= '.'}$decimal"
   fi
@@ -21,15 +21,15 @@ nicenumber() {
   thousands=$integer
 
   while [ $thousands -gt 999 ]; do
-    remainder=$((thousands % 1000)) # Three least significant digits
+    remainder=$(($thousands % 1000)) # Three least significant digits
 
     # We need 'remainder' to be three digits. Do we need to add zeros?
     while [ ${#remainder} -lt 3 ]; do # Force leading zeros
       remainder="0$remainder"
     done
 
-    reslut="${TD:=","}${remainder}${result}" # Builds right to left
-    thousands=$((thousands / 1000))          # To left of remainder, if any
+    result="${TD:=","}${remainder}${result}" # Builds right to left
+    thousands=$(($thousands / 1000))         # To left of remainder, if any
   done
 
   nicenum="${thousands}${result}"
